@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'scheduler_algorithm.dart';
 import 'gantt_chart_widget.dart';
+import 'dart:io';
+import 'dart:convert';
 
 class SchedulerHome extends StatefulWidget {
   @override
@@ -75,6 +77,47 @@ class _SchedulerHomeState extends State<SchedulerHome> {
       output += 'Average Turnaround Time: $avgTurnaround';
     });
   }
+  void saveProcessList() async {
+  List<Map<String, dynamic>> data = [];
+  for (int i = 0; i < pidControllers.length; i++) {
+    data.add({
+      'pid': pidControllers[i].text,
+      'arrival': arrivalControllers[i].text,
+      'burst': burstControllers[i].text,
+      'priority': priorityControllers[i].text,
+    });
+  }
+
+  final file = File('process_list.json');
+  await file.writeAsString(jsonEncode(data));
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Process list saved!')),
+  );
+}
+
+void loadProcessList() async {
+  final file = File('process_list.json');
+  if (!await file.exists()) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('No saved process list found.')),
+    );
+    return;
+  }
+
+  final content = await file.readAsString();
+  final List<dynamic> data = jsonDecode(content);
+
+  for (int i = 0; i < data.length && i < 5; i++) {
+    pidControllers[i].text = data[i]['pid'] ?? '';
+    arrivalControllers[i].text = data[i]['arrival'] ?? '';
+    burstControllers[i].text = data[i]['burst'] ?? '';
+    priorityControllers[i].text = data[i]['priority'] ?? '';
+  }
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Process list loaded!')),
+  );
+}
 
   @override
   void initState() {
@@ -172,7 +215,25 @@ class _SchedulerHomeState extends State<SchedulerHome> {
               ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: simulate, child: Text('Simulate')),
+            Row(
+  children: [
+    ElevatedButton(
+      onPressed: simulate,
+      child: Text('Simulate'),
+    ),
+    SizedBox(width: 10),
+    ElevatedButton(
+      onPressed: saveProcessList,
+      child: Text('Save Process List'),
+    ),
+    SizedBox(width: 10),
+    ElevatedButton(
+      onPressed: loadProcessList,
+      child: Text('Load Process List'),
+    ),
+  ],
+),
+            
             SizedBox(height: 20),
             if (result.isNotEmpty) ...[
               SingleChildScrollView(
