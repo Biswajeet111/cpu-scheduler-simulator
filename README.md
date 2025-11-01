@@ -56,3 +56,7 @@ It provides a GUI for entering process data and visualizes execution using Gantt
 │
 └── utils/                   # Process class and helpers
     └── process.py
+## Versions
+
+- 🐍 Python (Tkinter): See `main.py`
+- 🧩 Flutter (Cross-platform GUI): See `flutter_version/`
