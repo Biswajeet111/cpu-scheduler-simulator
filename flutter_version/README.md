@@ -72,3 +72,4 @@ Here’s a basic execution of the CPU Scheduler Simulator:
 ![Basic Execution]
 ![Task](images/Screenshot1.png)
 ![Result](images/Screenshot2.png)
+
