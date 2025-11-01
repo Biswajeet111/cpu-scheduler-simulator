@@ -1,0 +1,1 @@
+[{"pid":"1","arrival":"2","burst":"10","priority":"10"},{"pid":"2","arrival":"5","burst":"2","priority":"10"},{"pid":"3","arrival":"1","burst":"1","priority":"20"},{"pid":"4","arrival":"4","burst":"4","priority":"10"},{"pid":"5","arrival":"2","burst":"2","priority":"20"}]
