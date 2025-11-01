@@ -6,6 +6,8 @@ void main() {
 }
 
 class CpuSchedulerApp extends StatelessWidget {
+  const CpuSchedulerApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

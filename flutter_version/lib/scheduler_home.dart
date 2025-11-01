@@ -5,6 +5,8 @@ import 'dart:io';
 import 'dart:convert';
 
 class SchedulerHome extends StatefulWidget {
+  const SchedulerHome({super.key});
+
   @override
   _SchedulerHomeState createState() => _SchedulerHomeState();
 }
