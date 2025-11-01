@@ -66,10 +66,16 @@ git add README.md
 git commit -m "Added polished README for CPU Scheduler Simulator"
 git push
 
-## 📸 Screenshot
+## 📸 Screenshots
 
-Here’s a basic execution of the CPU Scheduler Simulator:
-![Basic Execution]
-![Task](images/Screenshot1.png)
-![Result](images/Screenshot2.png)
+### 🧾 Task Input
 
+This shows the process list entered into the simulator:
+
+![Task Input](images/Screenshot1.png)
+
+### 📊 Result Output
+
+This shows the result table and Gantt chart after simulation:
+
+![Result Output](images/Screenshot2.png)
