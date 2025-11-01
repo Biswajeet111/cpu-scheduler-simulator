@@ -61,7 +61,7 @@ class _SchedulerHomeState extends State<SchedulerHome> {
     double totalTurnaround = 0;
 
     for (var item in result) {
-      final arrival = inputData.firstWhere((p) => p['pid'] == item['pid'])['arrival'] as int;
+     final arrival = inputData.firstWhere((p) => p['pid'] == item['pid'],orElse: () => {'arrival': 0}, )['arrival'] as int;
       final waiting = item['start'] - arrival;
       final turnaround = item['end'] - arrival;
       totalWaiting += waiting;
@@ -247,7 +247,7 @@ void loadProcessList() async {
                     DataColumn(label: Text('Turnaround')),
                   ],
                   rows: result.map((item) {
-                    final arrival = inputData.firstWhere((p) => p['pid'] == item['pid'])['arrival'] as int;
+                    final arrival = inputData.firstWhere((p) => p['pid'] == item['pid'],orElse: () => {'arrival': 0},)['arrival'] as int;
                     final waiting = item['start'] - arrival;
                     final turnaround = item['end'] - arrival;
                     return DataRow(cells: [
