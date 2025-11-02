@@ -34,13 +34,18 @@ class _SchedulerHomeState extends State<SchedulerHome> {
       final pid = pidControllers[i].text;
       final arrival = int.tryParse(arrivalControllers[i].text) ?? 0;
       final burst = int.tryParse(burstControllers[i].text) ?? 0;
-      final priority = int.tryParse(priorityControllers[i].text) ?? 0;
-      inputData.add({
-        'pid': pid,
-        'arrival': arrival,
-        'burst': burst,
-        'priority': priority,
-      });
+      final data = {
+      'pid': pid,
+      'arrival': arrival,
+      'burst': burst,
+    };
+
+if (selectedAlgorithm == 'Priority') {
+  final priority = int.tryParse(priorityControllers[i].text) ?? 0;
+  data['priority'] = priority;
+}
+
+inputData.add(data);
     }
 
     result.clear();
@@ -198,19 +203,20 @@ void loadProcessList() async {
                             },
                           ),
                         ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: priorityControllers[i],
-                            decoration: InputDecoration(labelText: 'Priority'),
-                            keyboardType: TextInputType.number,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) return 'Required';
-                              final num = int.tryParse(value);
-                              if (num == null || num < 0) return 'Invalid';
-                              return null;
-                            },
-                          ),
-                        ),
+                        if (selectedAlgorithm == 'Priority')
+   Expanded(
+    child: TextFormField(
+      controller: priorityControllers[i],
+      decoration: InputDecoration(labelText: 'Priority'),
+      keyboardType: TextInputType.number,
+      validator: (value) {
+        if (value == null || value.isEmpty) return 'Required';
+        final num = int.tryParse(value);
+        if (num == null || num < 0) return 'Invalid';
+        return null;
+      },
+    ),
+  ),
                       ],
                     ),
                 ],
