@@ -40,7 +40,7 @@ class _SchedulerHomeState extends State<SchedulerHome> {
       'burst': burst,
     };
 
-if (selectedAlgorithm == 'Priority') {
+if (selectedAlgorithm == 'Priority' || selectedAlgorithm == 'Multilevel'){
   final priority = int.tryParse(priorityControllers[i].text) ?? 0;
   data['priority'] = priority;
 }
@@ -56,11 +56,20 @@ inputData.add(data);
       case 'SJF':
         result = sjf(inputData);
         break;
+      case 'SRTF':
+         result = srtf(inputData); // You must import this from scheduler_algorithm.dart
+         break;
       case 'RR':
         result = rr(inputData, 2);
         break;
       case 'Priority':
         result = priorityScheduling(inputData);
+        break;
+      case 'Multilevel':
+    // Split inputData into foreground and background queues
+        final fg = inputData.sublist(0, inputData.length ~/ 2);
+        final bg = inputData.sublist(inputData.length ~/ 2);
+        result = multilevelQueue(fg, bg, 2); // You must import this too
         break;
     }
 
@@ -155,7 +164,7 @@ void loadProcessList() async {
           children: [
             DropdownButton<String>(
               value: selectedAlgorithm,
-              items: ['FCFS', 'SJF', 'RR', 'Priority']
+              items: ['FCFS', 'SJF', 'SRTF', 'RR', 'Priority', 'Multilevel']
                   .map((algo) => DropdownMenuItem(value: algo, child: Text(algo)))
                   .toList(),
               onChanged: (value) => setState(() => selectedAlgorithm = value!),
@@ -203,20 +212,20 @@ void loadProcessList() async {
                             },
                           ),
                         ),
-                        if (selectedAlgorithm == 'Priority')
-   Expanded(
-    child: TextFormField(
-      controller: priorityControllers[i],
-      decoration: InputDecoration(labelText: 'Priority'),
-      keyboardType: TextInputType.number,
-      validator: (value) {
-        if (value == null || value.isEmpty) return 'Required';
-        final num = int.tryParse(value);
-        if (num == null || num < 0) return 'Invalid';
-        return null;
-      },
-    ),
-  ),
+                        if (selectedAlgorithm == 'Priority' || selectedAlgorithm == 'Multilevel')
+                             Expanded(
+                              child: TextFormField(
+                                  controller: priorityControllers[i],
+                                  decoration: InputDecoration(labelText: 'Priority'),
+                                  keyboardType: TextInputType.number,
+                                  validator: (value) {
+                                  if (value == null || value.isEmpty) return 'Required';
+                                  final num = int.tryParse(value);
+                                  if (num == null || num < 0) return 'Invalid';
+                                   return null;
+                           },
+                          ),
+                        ),
                       ],
                     ),
                 ],
