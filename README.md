@@ -2,7 +2,7 @@
 
 A cross-platform Flutter app that simulates classic CPU scheduling algorithms with visual Gantt charts, context switching indicators, and performance metrics. Built for students, educators, and systems enthusiasts.
 
-![App Screenshot](assets/images/Screenshot1.png)
+![App Screenshot](images/Screenshot1.png)
 
 ---
 
