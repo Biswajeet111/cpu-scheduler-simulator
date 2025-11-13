@@ -39,7 +39,6 @@ A cross-platform Flutter app that simulates classic CPU scheduling algorithms wi
 |--------------------|----------------------|
 | ![Task Input](images/Screenshot1.png) | ![Execution](images/Screenshot2.png) |
 
-*(Add a context switch screenshot in `images/` if you want the third column shown.)*
 
 ---
 
@@ -153,7 +152,3 @@ Pull requests are welcome! If you'd like to add a new algorithm, improve UI, or 
 - Submit a pull request with a clear description
 
 Please follow the existing code style and comment your logic.
-
-## 📜 License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
