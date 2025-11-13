@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'scheduler_home.dart';
+import 'starting_page.dart';
 
 void main() {
-  runApp(CpuSchedulerApp());
+  runApp(const CpuSchedulerApp());
 }
 
 class CpuSchedulerApp extends StatelessWidget {
@@ -11,9 +11,12 @@ class CpuSchedulerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'CPU Scheduler Simulator',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SchedulerHome(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: starting_page(),
     );
   }
 }
