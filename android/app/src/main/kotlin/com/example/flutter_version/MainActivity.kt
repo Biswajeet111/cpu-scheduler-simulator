@@ -1,4 +1,4 @@
-package com.example.flutter_version
+package com.example.cpu_scheduler
 
 import io.flutter.embedding.android.FlutterActivity
 
