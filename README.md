@@ -420,6 +420,15 @@ Lovely Professional University (LPU)
 - **LinkedIn:** [https://www.linkedin.com/in/biswajeet-kumar-a70043362?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app]
 - **Email:** [biswajeetk497@gmail.com]
 
+**Yash Raj**  
+B.Tech Computer Science & Engineering  
+Lovely Professional University (LPU)
+
+### Connect
+- **GitHub:** [@212myash](https://github.com/212myash)
+- **LinkedIn:** [https://www.linkedin.com/in/modi-yash-raj-9602a8271/]
+- **Email:** [212myashraj@gamil.com]
+
 Passionate about systems engineering, algorithm optimization, and building educational tools.
 ---
 
