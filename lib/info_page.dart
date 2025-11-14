@@ -4,7 +4,7 @@ import 'process_form_page.dart';
 class InfoPage extends StatefulWidget {
   const InfoPage({
     super.key,
-    required this.algoName, // short: FCFS/SJF/RR/PS
+    required this.algoName, // short: FCFS/SJF/RR/PS/multi-level/srtf
     required this.fullName, // full: First Come First Serve, ...
   });
 
@@ -28,6 +28,8 @@ class _InfoPageState extends State<InfoPage> {
     'SJF':  'Executes the job with the smallest CPU burst next.',
     'RR':   'Each process gets a fixed time quantum in round-robin fashion.',
     'PS':   'Higher priority process runs first (preemptive/non-preemptive).',
+    'SRTF': 'Preemptive version of SJF — the job with the smallest remaining time runs.',
+    'MLQ':  'Multi-Level Queue: processes placed into priority queues and scheduled per-queue.',
   };
 
   @override
