@@ -21,13 +21,25 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
   static const Color primaryBlue = Color(0xFF0A63C9);
   static const Color bgLight = Color(0xFFF3F6FB);
 
+  static const Map<String, String> _algoFullNames = {
+    'FCFS': 'First Come First Serve',
+    'SJF': 'Shortest Job First',
+    'RR': 'Round Robin',
+    'PS': 'Priority Scheduling',
+    'SRTF': 'Shortest Remaining Time First',
+    'MLQ': 'Multi-Level Queue Scheduling',
+  };
+
   late final List<TextEditingController> pidCtrls;
   late final List<TextEditingController> atCtrls;
   late final List<TextEditingController> btCtrls;
   late final List<TextEditingController>? prCtrls; // only for PS
   final TextEditingController _quantumCtrl = TextEditingController(); // only for RR
 
-  bool get isPS => widget.algoName.toUpperCase() == 'PS';
+  bool get isPriority => () {
+    final a = widget.algoName.toUpperCase();
+    return a == 'PS' || a == 'MLQ';
+  }();
   bool get isRR => widget.algoName.toUpperCase() == 'RR';
 
   @override
@@ -36,7 +48,7 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
     pidCtrls = List.generate(widget.processCount, (i) => TextEditingController(text: 'P${i + 1}'));
     atCtrls  = List.generate(widget.processCount, (i) => TextEditingController());
     btCtrls  = List.generate(widget.processCount, (i) => TextEditingController());
-    prCtrls  = isPS ? List.generate(widget.processCount, (i) => TextEditingController()) : null;
+    prCtrls  = isPriority ? List.generate(widget.processCount, (i) => TextEditingController()) : null;
   }
 
   @override
@@ -50,7 +62,8 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final algo = widget.algoName.toUpperCase();
+    final short = widget.algoName.toUpperCase();
+    final algo = '${_algoFullNames[short] ?? short} ($short)';
 
     return Scaffold(
       backgroundColor: bgLight,
@@ -98,7 +111,7 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
                 _header('PID'),
                 _header('Arrival Time'),
                 _header('Burst Time'),
-                if (isPS) _header('Priority'),
+                if (isPriority) _header('Priority'),
               ],
             ),
             const SizedBox(height: 8),
@@ -112,7 +125,7 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
                 Expanded(child: _blueColumn(atCtrls, hint: '0')),
                 const SizedBox(width: 12),
                 Expanded(child: _blueColumn(btCtrls, hint: '5')),
-                if (isPS) ...[
+                if (isPriority) ...[
                   const SizedBox(width: 12),
                   Expanded(child: _blueColumn(prCtrls!, hint: '1')), // lower number = higher priority
                 ]
@@ -214,7 +227,7 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
       if (quantum == null || quantum <= 0) { _toast('Enter a valid Time Quantum (>0)'); return; }
     }
 
-    if (isPS) {
+    if (isPriority) {
       for (int i = 0; i < n; i++) {
         final p = int.tryParse(prCtrls![i].text.trim());
         if (p == null) { _toast('Row ${i + 1}: Enter valid Priority'); return; }
@@ -236,8 +249,14 @@ class _ProcessFormPageState extends State<ProcessFormPage> {
       case 'SJF':
         out = _sjfNonPreemptive(ids, at, bt);
         break;
+      case 'SRTF':
+        out = _srtf(ids, at, bt);
+        break;
       case 'PS':
         out = _priorityNonPreemptive(ids, at, bt, pr);
+        break;
+      case 'MLQ':
+        out = _multiLevelQueue(ids, at, bt, pr);
         break;
       case 'RR':
         out = _roundRobin(ids, at, bt, quantum!);
@@ -452,4 +471,107 @@ _AlgoOutput _roundRobin(List<String> id, List<int> at, List<int> bt, int q) {
   }
   final n = procs.length;
   return (totW / n, totT / n);
+}
+// Shortest Remaining Time First (preemptive)
+_AlgoOutput _srtf(List<String> id, List<int> at, List<int> bt) {
+  final n = id.length;
+  final remaining = <String, int>{for (int i = 0; i < n; i++) id[i]: bt[i]};
+  final arrival = <String, int>{for (int i = 0; i < n; i++) id[i]: at[i]};
+
+  final order = List<int>.generate(n, (i) => i)..sort((a, b) => at[a].compareTo(at[b]));
+  int nextIdx = 0;
+  int time = 0;
+  final timeline = <GanttSegment>[];
+  final finish = <String, int>{};
+  final ready = <String>{};
+
+  void addArrivalsUpTo(int t) {
+    while (nextIdx < n && at[order[nextIdx]] <= t) {
+      ready.add(id[order[nextIdx]]);
+      nextIdx++;
+    }
+  }
+
+  addArrivalsUpTo(0);
+
+  while (finish.length < n) {
+    if (ready.isEmpty) {
+      if (nextIdx < n) {
+        final jump = at[order[nextIdx]];
+        timeline.add(GanttSegment(pid: 'IDLE', start: time, end: jump, color: const Color(0xFFB0B8C1)));
+        time = jump;
+        addArrivalsUpTo(time);
+        continue;
+      } else {
+        break;
+      }
+    }
+
+    // pick process with smallest remaining time
+    String sel = ready.first;
+    for (final r in ready) {
+      if (remaining[r]! < remaining[sel]!) sel = r;
+    }
+
+    final nextArrivalTime = (nextIdx < n) ? at[order[nextIdx]] : null;
+    int slice = remaining[sel]!;
+    if (nextArrivalTime != null && time + slice > nextArrivalTime) {
+      slice = nextArrivalTime - time;
+    }
+
+    final start = time;
+    final end = time + slice;
+    timeline.add(GanttSegment(pid: sel, start: start, end: end));
+    time = end;
+    remaining[sel] = remaining[sel]! - slice;
+
+    addArrivalsUpTo(time);
+
+    if (remaining[sel] == 0) {
+      finish[sel] = time;
+      ready.remove(sel);
+    }
+  }
+
+  final procs = <_Proc>[for (int i = 0; i < n; i++) _Proc(id[i], at[i], bt[i])];
+  final (avgW, avgT) = _averages(procs, finish);
+  return _AlgoOutput(timeline, avgW, avgT);
+}
+
+// Multi-Level Queue Scheduling (non-preemptive)
+ 
+_AlgoOutput _multiLevelQueue(List<String> id, List<int> at, List<int> bt, List<int> pr) {
+  final n = id.length;
+  // Build map of priority -> list of indices
+  final Map<int, List<int>> queues = {};
+  for (int i = 0; i < n; i++) {
+    final p = (i < pr.length) ? pr[i] : 0;
+    queues.putIfAbsent(p, () => []).add(i);
+  }
+
+  final sortedPriorities = queues.keys.toList()..sort();
+
+  final timeline = <GanttSegment>[];
+  final finish = <String, int>{};
+  int time = 0;
+
+  for (final priority in sortedPriorities) {
+    final idxList = queues[priority]!;
+    // sort by arrival time
+    idxList.sort((a, b) => at[a].compareTo(at[b]));
+    for (final i in idxList) {
+      final p = _Proc(id[i], at[i], bt[i], priority: priority);
+      if (time < p.arrival) {
+        timeline.add(GanttSegment(pid: 'IDLE', start: time, end: p.arrival, color: const Color(0xFFB0B8C1)));
+        time = p.arrival;
+      }
+      timeline.add(GanttSegment(pid: p.id, start: time, end: time + p.burst));
+      time += p.burst;
+      finish[p.id] = time;
+    }
+  }
+
+  final procs = <_Proc>[for (int i = 0; i < n; i++) _Proc(id[i], at[i], bt[i], priority: (i < pr.length ? pr[i] : 0))];
+  final (avgW, avgT) = _averages(procs, finish);
+  return _AlgoOutput(timeline, avgW, avgT);
 }

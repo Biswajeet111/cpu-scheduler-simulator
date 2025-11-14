@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, unnecessary_underscores
+
 import 'package:flutter/material.dart';
 import 'info_page.dart';
 
@@ -18,6 +20,8 @@ class _ChooseAlgorithmPageState extends State<ChooseAlgorithmPage> {
     {'short': 'SJF',  'full': 'Shortest Job First'},
     {'short': 'RR',   'full': 'Round Robin'},
     {'short': 'PS',   'full': 'Priority Scheduling'},
+    {'short': 'SRTF', 'full': 'Shortest Remaining Time First'},
+    {'short': 'MLQ',  'full': 'Multi-Level Queue Scheduling'},
   ];
 
   int? _selectedIndex;
