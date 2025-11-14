@@ -422,6 +422,8 @@ Lovely Professional University (LPU)
 
 ---
 
+## Team Member
+
 **Yash Raj**  
 B.Tech Computer Science & Engineering  
 Lovely Professional University (LPU)
@@ -431,7 +433,6 @@ Lovely Professional University (LPU)
 - **LinkedIn:** [https://www.linkedin.com/in/modi-yash-raj-9602a8271/]
 - **Email:** [212myashraj@gamil.com]
 
-Passionate about systems engineering, algorithm optimization, and building educational tools.
 ---
 
 ## 🙏 Acknowledgments
