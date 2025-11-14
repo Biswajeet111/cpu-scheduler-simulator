@@ -419,7 +419,7 @@ Lovely Professional University (LPU)
 - **GitHub:** [@Biswajeet111](https://github.com/Biswajeet111)
 - **LinkedIn:** [https://www.linkedin.com/in/biswajeet-kumar-a70043362?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app]
 - **Email:** [biswajeetk497@gmail.com]
-
+Passionate about System Engineering, Algorithm Optimization and building Educational Tools.
 ---
 
 ## Team Member
