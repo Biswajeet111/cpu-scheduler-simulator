@@ -76,7 +76,7 @@ This simulator implements **6 major CPU scheduling algorithms** and visualizes t
 
 | Algorithm Selection | Process Form Entry | Results & Gantt Chart |
 |:-------------------:|:------------------:|:--------------------:|
-| Choose from 4 algorithms | Input process details | View metrics & timeline |
+| Choose from 6 algorithms | Input process details | View metrics & timeline |
 | ![](assets/images/algo.png) | ![](assets/images/input.png) | ![](assets/images/result.png) |
 
 ---
